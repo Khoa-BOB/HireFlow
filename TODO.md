@@ -16,17 +16,17 @@
 
 ## TODO
 
-- [ ] Decide technology stack
-    - [ ] Go + Gin/Fiber (recommended)
-    - [ ] PostgreSQL
+- [x] Decide technology stack
+    - [x] Go + Gin/Fiber (recommended)
+    - [x] PostgreSQL
     - [ ] Redis
-    - [ ] Docker
+    - [x] Docker
     - [ ] MinIO
-- [ ] Create GitHub repository
-- [ ] Setup project structure
-- [ ] Configure Docker Compose
-- [ ] Configure Makefile
-- [ ] Setup environment variables
+- [x] Create GitHub repository
+- [x] Setup project structure
+- [x] Configure Docker Compose
+- [x] Configure Makefile
+- [x] Setup environment variables
 - [ ] Configure logging
 - [ ] Configure linting
 - [ ] Configure formatter
