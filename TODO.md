@@ -28,8 +28,8 @@
 - [x] Configure Makefile
 - [x] Setup environment variables
 - [x] Configure logging
-- [ ] Configure linting
-- [ ] Configure formatter
+- [x] Configure linting
+- [x] Configure formatter
 - [ ] Setup GitHub Actions
 - [ ] Create API documentation skeleton
 

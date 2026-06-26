@@ -6,3 +6,6 @@ fmt:
 
 lint:
 	golangci-lint run
+
+docs:
+	echo "OpenAPI docs are in /internal/docs/openapi.yaml"
