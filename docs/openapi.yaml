@@ -2,15 +2,15 @@ openapi: 3.0.3
 
 info:
   title: HireFlow API
-  descriptoion: API documentation for HireFlow application
+  description: API documentation for HireFlow application
   version: 1.0.0
 
 servers:
   - url: http://localhost:8000
-    description: Local developement server
+    description: Local development server
 
 paths:
-  /:
+  /health:
     get:
       summary: Health check endpoint
       description: Check whether the API server is running
