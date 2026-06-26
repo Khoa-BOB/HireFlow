@@ -27,7 +27,7 @@
 - [x] Configure Docker Compose
 - [x] Configure Makefile
 - [x] Setup environment variables
-- [ ] Configure logging
+- [x] Configure logging
 - [ ] Configure linting
 - [ ] Configure formatter
 - [ ] Setup GitHub Actions
