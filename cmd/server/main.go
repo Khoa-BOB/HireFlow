@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main(){
+func main() {
 	router := gin.Default()
 	log := logger.NewLogger()
 	slog.SetDefault(log)
 	slog.Info("Starting server on localhost:8000")
-	router.GET("/", func(c * gin.Context){
+	router.GET("/", func(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"message": "Hello from server!"})
 	})
-	if err:= router.Run("localhost:8000"); err != nil{
+	if err := router.Run("localhost:8000"); err != nil {
 		slog.Error("Failed to start the server", "error", err)
 		os.Exit(1)
 	}
