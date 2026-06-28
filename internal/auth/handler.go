@@ -1,8 +1,10 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
 	"log/slog"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AuthHandler struct {
@@ -21,7 +23,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	// Parse JSON request
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Info("JSON parse user error:", "error", err)
-		c.JSON(400, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -29,10 +31,10 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 	// Call business logic
 	resp, err := h.service.Register(c.Request.Context(), req)
-	
+
 	if err != nil {
-		slog.Info("Server error:", "error", err)
-		c.JSON(500, gin.H{
+		slog.Error("Register failed", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -40,5 +42,50 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 	slog.Info("Create user:", "id", resp.ID, "full_name", resp.FullName, "email", resp.Email, "created_at", resp.CreatedAt)
 	// Return response
-	c.JSON(201, resp)
+	c.JSON(http.StatusCreated, resp)
+}
+
+func (h *AuthHandler) Login(c *gin.Context){
+	var req LoginRequest
+
+	// Parse JSON request
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Info("JSON parse user error:", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Call business logic
+	resp, err := h.service.Login(c.Request.Context(), req)
+
+	if err != nil {
+		slog.Error("Login failed", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	slog.Info("Create user:", "id", resp.ID, "full_name", resp.FullName, "email", resp.Email, "created_at", resp.CreatedAt)
+	// Return response
+	c.JSON(http.StatusOK, resp)
+}
+
+func (h *AuthHandler) Me(c *gin.Context) {
+	userID := c.GetString("user_id")
+
+	resp, err := h.service.GetUserbyID(c, userID)
+
+	if err != nil {
+		slog.Error("Me failed", "user_id", userID, "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	slog.Info("Me", "user_id", resp.ID, "email", resp.Email)
+	c.JSON(http.StatusOK, resp)
 }

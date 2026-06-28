@@ -29,8 +29,36 @@ func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (
 	err := r.db.QueryRow(ctx, query, email).Scan(
 		&user.ID,
 		&user.Email,
-		&user.PasswordHash,
 		&user.FullName,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user,nil
+}
+
+func (r *PostgresRepository)  GetUserByID(ctx context.Context, uuid string) (*User, error) {
+	query := `
+		SELECT id, email, full_name, password_hash, created_at
+		FROM users
+		WHERE id = $1
+	`
+	var user User
+
+	slog.Info("Query database", "query", query)
+	err := r.db.QueryRow(ctx, query, uuid).Scan(
+		&user.ID,
+		&user.Email,
+		&user.FullName,
+		&user.PasswordHash,
 		&user.CreatedAt,
 	)
 

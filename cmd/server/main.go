@@ -9,9 +9,12 @@ import (
 	"github.com/Khoa-BOB/hireflow/internal/database"
 	"github.com/Khoa-BOB/hireflow/internal/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	_ = godotenv.Load()
+
 	router := gin.Default()
 	log := logger.NewLogger()
 	slog.SetDefault(log)
