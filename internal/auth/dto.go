@@ -12,6 +12,7 @@ type RegisterResponse struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
 	FullName  string    `json:"full_name"`
+	Role 	  string    `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -25,6 +26,7 @@ type LoginResponse struct {
 	ID        	string    `json:"id"`
 	Email     	string    `json:"email"`
 	FullName  	string    `json:"full_name"`
+	Role 	  string    `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -32,4 +34,5 @@ type UserResponse struct {
 	ID string
 	FullName string
 	Email string
+	Role string
 }

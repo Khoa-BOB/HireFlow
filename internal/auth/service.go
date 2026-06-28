@@ -49,6 +49,7 @@ func (s * AuthService) Register(ctx context.Context, req RegisterRequest) (* Reg
 		ID:        user.ID,
 		Email:     user.Email,
 		FullName:  user.FullName,
+		Role: 	   user.Role,
 		CreatedAt: user.CreatedAt,
 	}, nil
 
@@ -73,7 +74,7 @@ func (s * AuthService) Login(ctx context.Context, req LoginRequest) (* LoginResp
 	}
 
 	slog.Info("Generate JWT token")
-	token, err := GenerateJWT(user.ID, user.Email)
+	token, err := GenerateJWT(user.ID, user.Email, user.Role)
 
 	if err != nil {
 		return nil, err
@@ -84,6 +85,7 @@ func (s * AuthService) Login(ctx context.Context, req LoginRequest) (* LoginResp
 		ID:        		user.ID,
 		Email:     		user.Email,
 		FullName:  		user.FullName,
+		Role: 			user.Role,
 		CreatedAt: 		user.CreatedAt,
 	}, nil
 }
@@ -105,5 +107,6 @@ func (s * AuthService) GetUserbyID(ctx context.Context, id string) (* UserRespon
 		ID: user.ID,
 		FullName: user.FullName,
 		Email: user.Email,
+		Role: user.Role,
 	}, nil
 }

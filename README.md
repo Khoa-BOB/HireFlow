@@ -76,6 +76,7 @@ The project aims to help developers learn and practice:
 
 # High-Level System Architecture
 
+```
                     Client
                        │
                 REST API / JWT
@@ -96,6 +97,7 @@ The project aims to help developers learn and practice:
                   Resume PDFs     Email / AI
                                       │
                               LLM / Embedding API
+```
 
 ---
 

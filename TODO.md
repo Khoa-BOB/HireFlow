@@ -108,15 +108,15 @@ Authentication & Authorization
 
 ## TODO
 
-- [ ] Register
-- [ ] Login
+- [x] Register
+- [x] Login
 - [ ] Logout
 - [ ] Refresh Token
-- [ ] JWT
-- [ ] Password Hashing
+- [x] JWT
+- [x] Password Hashing
 - [ ] Email Verification
 - [ ] Password Reset
-- [ ] Middleware
+- [x] Middleware
 - [ ] RBAC
 
 ### Learn
