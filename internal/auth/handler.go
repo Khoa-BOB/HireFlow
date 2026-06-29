@@ -76,7 +76,7 @@ func (h *AuthHandler) Login(c *gin.Context){
 func (h *AuthHandler) Me(c *gin.Context) {
 	userID := c.GetString("user_id")
 
-	resp, err := h.service.GetUserbyID(c, userID)
+	resp, err := h.service.GetUserbyID(c.Request.Context(), userID)
 
 	if err != nil {
 		slog.Error("Me failed", "user_id", userID, "error", err)
@@ -88,4 +88,19 @@ func (h *AuthHandler) Me(c *gin.Context) {
 
 	slog.Info("Me", "user_id", resp.ID, "email", resp.Email)
 	c.JSON(http.StatusOK, resp)
+}
+
+func (h *AuthHandler) GetUsers(c * gin.Context){
+	resps, err := h.service.GetUsers(c.Request.Context())
+
+	if err != nil {
+		slog.Error("Get users failed", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	slog.Info("Users", "users", resps)
+	c.JSON(http.StatusOK, resps)
 }

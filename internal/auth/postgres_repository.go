@@ -75,6 +75,51 @@ func (r *PostgresRepository)  GetUserByID(ctx context.Context, uuid string) (*Us
 	return &user,nil
 }
 
+func (r *PostgresRepository) GetUsers(ctx context.Context) ([]UserWithRole, error){
+	query := `
+			SELECT
+				u.id,
+				u.email,
+				u.full_name,
+				r.name AS role,
+				u.created_at
+			FROM users u
+			JOIN roles r
+				ON u.role_id = r.id
+			ORDER BY u.created_at DESC;
+			`
+
+	slog.Info("Query database", "query", query)
+	rows, err := r.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	users := []UserWithRole{}
+
+	for rows.Next(){
+		var user UserWithRole
+
+		err := rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.FullName,
+			&user.Role,
+			&user.CreatedAt,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users,nil
+
+}
+
 func (r *PostgresRepository) CreateUser(ctx context.Context,
 										email string,
 										passwordHash string,

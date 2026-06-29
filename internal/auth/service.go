@@ -90,23 +90,41 @@ func (s * AuthService) Login(ctx context.Context, req LoginRequest) (* LoginResp
 	}, nil
 }
 
-func (s * AuthService) GetUserbyID(ctx context.Context, id string) (* UserResponse, error){
-	
+func (s *AuthService) GetUserbyID(ctx context.Context, id string) (*UserResponse, error) {
 	user, err := s.repo.GetUserByID(ctx, id)
-
 	if err != nil {
 		return nil, err
 	}
 
-	
 	if user == nil {
 		return nil, errUserNotFound
 	}
 
 	return &UserResponse{
-		ID: user.ID,
-		FullName: user.FullName,
-		Email: user.Email,
-		Role: user.Role,
+		ID:        user.ID,
+		FullName:  user.FullName,
+		Email:     user.Email,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
 	}, nil
+}
+
+func (s *AuthService) GetUsers(ctx context.Context) ([]UserResponse, error) {
+	users, err := s.repo.GetUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resps := make([]UserResponse, 0, len(users))
+	for _, user := range users {
+		resps = append(resps, UserResponse{
+			ID:        user.ID,
+			Email:     user.Email,
+			FullName:  user.FullName,
+			Role:      user.Role,
+			CreatedAt: user.CreatedAt,
+		})
+	}
+
+	return resps, nil
 }

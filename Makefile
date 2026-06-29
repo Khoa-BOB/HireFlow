@@ -1,4 +1,4 @@
-.PHONY: run fmt lint docs
+.PHONY: run fmt lint docs seed
 run:
 	go run ./cmd/server/main.go
 
@@ -25,3 +25,7 @@ migrate-down:
 migrate-force:
 	export $$(grep -v '^#' .env | xargs) && \
 	migrate -path migrations -database "$$DATABASE_URL" force $(version)
+
+seed:
+	export $$(grep -v '^#' .env | xargs) && \
+	psql "$$DATABASE_URL" -f seeds/seed.sql

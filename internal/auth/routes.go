@@ -13,4 +13,8 @@ func (h* AuthHandler) RegisterRoutes(router * gin.RouterGroup){
 	protected := router.Group("")
 	protected.Use(AuthMiddleware())
 	protected.GET("/me", h.Me)
+
+	admin := protected.Group("/admin")
+	admin.Use(RequireRole("admin"))
+	admin.GET("/users", h.GetUsers) 
 }

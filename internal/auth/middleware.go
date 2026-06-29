@@ -63,3 +63,27 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func RequireRole(roles ...string) gin.HandlerFunc {
+	allowed := map[string]bool{}
+	for _, role := range roles {
+		allowed[role] = true
+	}
+	return func(c * gin.Context){
+		role := c.GetString("role")
+		if role == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "missing authentication",
+			})
+			return
+		}
+		if _, ok := allowed[role]; !ok{
+			slog.Warn("Forbidden: insufficient role", "role", role, "path", c.Request.URL.Path)
+			c.JSON(http.StatusForbidden, gin.H{
+				"error" : "forbidden",
+			})
+			return
+		}
+		c.Next()
+	}
+}

@@ -31,8 +31,9 @@ type LoginResponse struct {
 }
 
 type UserResponse struct {
-	ID string
-	FullName string
-	Email string
-	Role string
+	ID        string    `json:"id"`
+	FullName  string    `json:"full_name"`
+	Email     string    `json:"email"`
+	Role      string    `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
 }
