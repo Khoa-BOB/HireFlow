@@ -59,14 +59,14 @@
 
 - [x] Users
 - [x] Roles
-- [ ] Companies
-- [ ] Departments
-- [ ] Jobs
-- [ ] Candidates
-- [ ] Applications
-- [ ] Skills
-- [ ] Candidate Skills
-- [ ] Job Skills
+- [x] Companies
+- [x] Departments
+- [x] Jobs
+- [x] Candidates
+- [x] Applications
+- [x] Skills
+- [x] Candidate Skills
+- [x] Job Skills
 - [ ] Interviews
 - [ ] Interview Feedback
 - [ ] Offers
