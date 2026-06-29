@@ -57,8 +57,8 @@
 
 ### Design ER Diagram
 
-- [ ] Users
-- [ ] Roles
+- [x] Users
+- [x] Roles
 - [ ] Companies
 - [ ] Departments
 - [ ] Jobs
