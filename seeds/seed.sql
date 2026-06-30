@@ -1,22 +1,15 @@
--- Seed users (passwords shown in comments)
-INSERT INTO users (email, password_hash, full_name, role_id)
-VALUES
-    (
-        'admin@hireflow.dev',
-        '$2a$10$pITSgjKHNWRQxjfCCKrWV.nKNHEvCcMWLaY7QKtvlCDBo0Mx4dDly', -- admin123
-        'Admin User',
-        (SELECT id FROM roles WHERE name = 'admin')
-    ),
-    (
-        'recruiter@hireflow.dev',
-        '$2a$10$Gw4VyIzYE6JC1QgY4TXnAu7WoJ49AIEBoT3HKqJ7ESJbYh9qtVlaa', -- recruiter123
-        'Alice Recruiter',
-        (SELECT id FROM roles WHERE name = 'recruiter')
-    ),
-    (
-        'candidate@hireflow.dev',
-        '$2a$10$UHqvaYd7wW9VHkyB765F1ulJJx7AtJgc9kRWKOC3OWbX1o.CvcHee', -- candidate123
-        'Bob Candidate',
-        (SELECT id FROM roles WHERE name = 'candidate')
-    )
-ON CONFLICT (email) DO NOTHING;
+-- Master seed file. Run with: make seed
+-- Designed to run on a freshly migrated database.
+-- All individual files are idempotent (ON CONFLICT DO NOTHING) except 06_jobs.sql,
+-- which skips entirely if jobs already exist.
+
+\i seeds/01_roles.sql
+\i seeds/02_users.sql
+\i seeds/03_companies.sql
+\i seeds/04_departments.sql
+\i seeds/05_skills.sql
+\i seeds/06_jobs.sql
+\i seeds/07_candidates.sql
+\i seeds/08_candidate_skills.sql
+\i seeds/09_job_skills.sql
+\i seeds/10_applications.sql

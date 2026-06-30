@@ -117,7 +117,7 @@ Authentication & Authorization
 - [ ] Email Verification
 - [ ] Password Reset
 - [x] Middleware
-- [ ] RBAC
+- [x] RBAC
 
 ### Learn
 
