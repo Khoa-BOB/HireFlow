@@ -108,6 +108,26 @@ func (s * AuthService) Login(ctx context.Context, req LoginRequest) (* LoginResp
 	}, nil
 }
 
+func (s *AuthService) Logout(ctx context.Context, refreshToken string) error {
+	refreshTokenHash := HashRefreshToken(refreshToken)
+	
+	token, err := s.repo.GetRefreshTokenByHash(ctx, refreshTokenHash)
+	if err != nil {
+		return err
+	}
+	
+	if token == nil || token.RevokedAt != nil || token.ExpiresAt.Before(time.Now()) {
+		return nil // already revoked/expired/unknown - nothing to do, logout succeeds
+	}
+
+	err = s.repo.RevokeRefreshToken(ctx, refreshTokenHash)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *AuthService) GetUserbyID(ctx context.Context, id string) (*UserResponse, error) {
 	user, err := s.repo.GetUserByID(ctx, id)
 	if err != nil {

@@ -24,6 +24,9 @@ type LoginRequest struct {
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
 }
+type LogOutRequest struct {
+	RefreshToken string `json:"refresh_token" binding:"required"`
+}
 
 type UserResponse struct {
 	ID        string    `json:"id"`

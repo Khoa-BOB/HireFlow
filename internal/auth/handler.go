@@ -73,6 +73,36 @@ func (h *AuthHandler) Login(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+func (h *AuthHandler) Logout(c *gin.Context){
+	var req LogOutRequest
+	
+	// Parse JSON request
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Info("JSON parse logout error:", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Call business logic
+	err := h.service.Logout(c.Request.Context(), req.RefreshToken)
+
+	if err != nil {
+		slog.Error("Logout failed", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	slog.Info("Logout success")
+	// Return response
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Logout successful",
+	})
+}
+
 func (h *AuthHandler) Me(c *gin.Context) {
 	userID := c.GetString("user_id")
 

@@ -110,8 +110,8 @@ Authentication & Authorization
 
 - [x] Register
 - [x] Login
-- [ ] Logout
-- [ ] Refresh Token
+- [x] Logout
+- [x] Refresh Token
 - [x] JWT
 - [x] Password Hashing
 - [ ] Email Verification
