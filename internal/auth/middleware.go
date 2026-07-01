@@ -4,11 +4,9 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 var errMissingAuthHeader = errors.New("missing authorization header")
@@ -36,22 +34,12 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		tokenString := parts[1]
 
-		claims := &JWTClaims{}
+		claims, err := ValidateJWT(tokenString)
 
-		token, err := jwt.ParseWithClaims(
-			tokenString,
-			claims,
-			func(token *jwt.Token) (interface{}, error) {
-				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, errors.New("unexpected signing method")
-				}
-				return []byte(os.Getenv("JWT_SECRET")), nil
-			},
-		)
-
-		if err != nil || !token.Valid {
-			slog.Warn("Invalid or expired token", "path", c.Request.URL.Path, "error", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": errInvalidToken.Error()})
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": errInvalidToken.Error(),
+			})
 			c.Abort()
 			return
 		}

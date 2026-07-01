@@ -21,13 +21,8 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type LoginResponse struct {
-	AccessToken string `json:"access_token"`
-	ID        	string    `json:"id"`
-	Email     	string    `json:"email"`
-	FullName  	string    `json:"full_name"`
-	Role 	  string    `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
+type RefreshTokenRequest struct {
+	RefreshToken string `json:"refresh_token" binding:"required"`
 }
 
 type UserResponse struct {
@@ -37,3 +32,10 @@ type UserResponse struct {
 	Role      string    `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 }
+type LoginResponse struct {
+	AccessToken string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	User UserResponse `json:"user"`
+}
+
+

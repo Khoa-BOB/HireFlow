@@ -40,7 +40,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	slog.Info("Create user:", "id", resp.ID, "full_name", resp.FullName, "email", resp.Email, "created_at", resp.CreatedAt)
+	slog.Info("Create user:", "user", resp)
 	// Return response
 	c.JSON(http.StatusCreated, resp)
 }
@@ -68,7 +68,7 @@ func (h *AuthHandler) Login(c *gin.Context){
 		return
 	}
 
-	slog.Info("Create user:", "id", resp.ID, "full_name", resp.FullName, "email", resp.Email, "created_at", resp.CreatedAt)
+	slog.Info("Login user:", "user", resp.User)
 	// Return response
 	c.JSON(http.StatusOK, resp)
 }
@@ -103,4 +103,30 @@ func (h *AuthHandler) GetUsers(c * gin.Context){
 
 	slog.Info("Users", "users", resps)
 	c.JSON(http.StatusOK, resps)
+}
+
+func (h *AuthHandler) RefreshToken(c *gin.Context){
+	var req RefreshTokenRequest
+
+	// Parse JSON request
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Info("JSON parse refresh token error:", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	resp, err := h.service.RefreshToken(c.Request.Context(), req.RefreshToken)
+
+	if err != nil {
+		slog.Error("Refresh token failed", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	slog.Info("Refresh token success", "user_id", resp.User.ID)
+	c.JSON(http.StatusOK, resp)
 }

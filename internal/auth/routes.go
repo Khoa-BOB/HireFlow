@@ -8,6 +8,7 @@ func (h* AuthHandler) RegisterRoutes(router * gin.RouterGroup){
 	//Public routes
 	router.POST("/registry", h.Register)
 	router.POST("/login",h.Login)
+	router.POST("/refresh", h.RefreshToken)
 
 	// protected routes
 	protected := router.Group("")

@@ -2,8 +2,10 @@ package auth
 
 import (
 	"context"
-	"log/slog"
 	"errors"
+	"log/slog"
+	"time"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -151,4 +153,78 @@ func (r *PostgresRepository) CreateUser(ctx context.Context,
 	}
 
 	return &user, nil
+}
+
+func (r *PostgresRepository) CreateRefreshToken(ctx context.Context, id, refreshToken string, expiresAt time.Time) (*RefreshToken, error){
+	query := `
+		INSERT INTO refresh_tokens (user_id, token, expires_at)
+		VALUES ($1, $2, $3)
+		RETURNING id, user_id, token, created_at, expires_at, revoked_at;
+	`
+	var token RefreshToken
+
+	slog.Info("Query database", "query", query)
+	err := r.db.QueryRow(ctx, query, id, refreshToken, expiresAt).Scan(
+		&token.ID,
+		&token.UserID,
+		&token.Token,
+		&token.CreatedAt,
+		&token.ExpiresAt,
+		&token.RevokedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
+}
+
+func (r *PostgresRepository) GetRefreshTokenByHash(ctx context.Context, refreshTokenHash string) (*RefreshToken, error){
+	query := `
+		SELECT id, user_id, token, created_at, expires_at, revoked_at
+		FROM refresh_tokens
+		WHERE token = $1
+	`
+	var token RefreshToken
+
+	slog.Info("Query database", "query", query)
+	err := r.db.QueryRow(ctx, query, refreshTokenHash).Scan(
+		&token.ID,
+		&token.UserID,
+		&token.Token,
+		&token.CreatedAt,
+		&token.ExpiresAt,
+		&token.RevokedAt,
+	)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
+}
+
+func (r *PostgresRepository) RevokeRefreshToken(ctx context.Context, refreshTokenHash string) error{
+	query := `
+		UPDATE refresh_tokens
+		SET revoked_at = NOW()
+		WHERE token = $1 AND revoked_at IS NULL;
+	`
+
+	slog.Info("Query database", "query", query)
+	cmdTag, err := r.db.Exec(ctx, query, refreshTokenHash)
+	if err != nil {
+		return err
+	}
+
+	if cmdTag.RowsAffected() == 0 {
+		return errors.New("refresh token not found or already revoked")
+	}
+
+	return nil
 }

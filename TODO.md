@@ -76,11 +76,11 @@
 
 ### PostgreSQL
 
-- [ ] Create migrations
-- [ ] Seed initial data
+- [x] Create migrations
+- [x] Seed initial data
 - [ ] Add constraints
 - [ ] Add indexes
-- [ ] Configure UUID primary keys
+- [x] Configure UUID primary keys
 
 ### Learn
 
@@ -121,12 +121,12 @@ Authentication & Authorization
 
 ### Learn
 
-- [ ] JWT
+- [x] JWT
 - [ ] OAuth
 - [ ] Session vs JWT
 - [ ] Cookies
-- [ ] Access Token
-- [ ] Refresh Token
+- [x] Access Token
+- [x] Refresh Token
 
 ### Deliverables
 

@@ -18,3 +18,12 @@ type UserWithRole struct {
 	Role string
 	CreatedAt time.Time
 }
+
+type RefreshToken struct {
+	ID string
+	UserID string
+	Token string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	RevokedAt *time.Time
+}

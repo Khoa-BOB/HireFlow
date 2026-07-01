@@ -11,6 +11,10 @@
     {
       "key": "access_token",
       "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
     }
   ],
   "item": [
@@ -39,6 +43,9 @@
                   "const res = pm.response.json();",
                   "if (res.access_token) {",
                   "    pm.collectionVariables.set('access_token', res.access_token);",
+                  "}",
+                  "if (res.refresh_token) {",
+                  "    pm.collectionVariables.set('refresh_token', res.refresh_token);",
                   "}"
                 ]
               }
@@ -64,6 +71,9 @@
                   "const res = pm.response.json();",
                   "if (res.access_token) {",
                   "    pm.collectionVariables.set('access_token', res.access_token);",
+                  "}",
+                  "if (res.refresh_token) {",
+                  "    pm.collectionVariables.set('refresh_token', res.refresh_token);",
                   "}"
                 ]
               }
@@ -76,6 +86,34 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"candidate@hireflow.dev\",\n  \"password\": \"candidate123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access_token) {",
+                  "    pm.collectionVariables.set('access_token', res.access_token);",
+                  "}",
+                  "if (res.refresh_token) {",
+                  "    pm.collectionVariables.set('refresh_token', res.refresh_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth/refresh",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
             }
           }
         },
