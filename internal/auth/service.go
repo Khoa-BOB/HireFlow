@@ -155,13 +155,7 @@ func (s *AuthService) GetUsers(ctx context.Context) ([]UserResponse, error) {
 
 	resps := make([]UserResponse, 0, len(users))
 	for _, user := range users {
-		resps = append(resps, UserResponse{
-			ID:        user.ID,
-			Email:     user.Email,
-			FullName:  user.FullName,
-			Role:      user.Role,
-			CreatedAt: user.CreatedAt,
-		})
+		resps = append(resps, UserResponse(user))
 	}
 
 	return resps, nil

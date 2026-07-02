@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -27,7 +26,6 @@ func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (
 	`
 	var user User
 
-	slog.Info("Query database", "query", query)
 	err := r.db.QueryRow(ctx, query, email).Scan(
 		&user.ID,
 		&user.Email,
@@ -55,8 +53,6 @@ func (r *PostgresRepository)  GetUserByID(ctx context.Context, uuid string) (*Us
 		WHERE id = $1
 	`
 	var user User
-
-	slog.Info("Query database", "query", query)
 	err := r.db.QueryRow(ctx, query, uuid).Scan(
 		&user.ID,
 		&user.Email,
@@ -91,7 +87,6 @@ func (r *PostgresRepository) GetUsers(ctx context.Context) ([]UserWithRole, erro
 			ORDER BY u.created_at DESC;
 			`
 
-	slog.Info("Query database", "query", query)
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
@@ -138,7 +133,6 @@ func (r *PostgresRepository) CreateUser(ctx context.Context,
 	`
 	var user User
 
-	slog.Info("Query database", "query", query)
 	err := r.db.QueryRow(ctx, query, email, passwordHash, fullname).Scan(
 		&user.ID,
 		&user.Email,
@@ -163,7 +157,6 @@ func (r *PostgresRepository) CreateRefreshToken(ctx context.Context, id, refresh
 	`
 	var token RefreshToken
 
-	slog.Info("Query database", "query", query)
 	err := r.db.QueryRow(ctx, query, id, refreshToken, expiresAt).Scan(
 		&token.ID,
 		&token.UserID,
@@ -188,7 +181,6 @@ func (r *PostgresRepository) GetRefreshTokenByHash(ctx context.Context, refreshT
 	`
 	var token RefreshToken
 
-	slog.Info("Query database", "query", query)
 	err := r.db.QueryRow(ctx, query, refreshTokenHash).Scan(
 		&token.ID,
 		&token.UserID,
@@ -216,7 +208,6 @@ func (r *PostgresRepository) RevokeRefreshToken(ctx context.Context, refreshToke
 		WHERE token = $1 AND revoked_at IS NULL;
 	`
 
-	slog.Info("Query database", "query", query)
 	cmdTag, err := r.db.Exec(ctx, query, refreshTokenHash)
 	if err != nil {
 		return err

@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Khoa-BOB/hireflow/internal/auth"
+	"github.com/Khoa-BOB/hireflow/internal/company"
 	"github.com/Khoa-BOB/hireflow/internal/database"
 	"github.com/Khoa-BOB/hireflow/internal/logger"
 	"github.com/gin-gonic/gin"
@@ -47,6 +48,9 @@ func main() {
 
 	// Register auth module
 	auth.RegisterModule(router, auth.NewPostgresRepository(post_db))
+
+	// Register company module
+	company.RegisterModule(router, company.NewPostgresRepository(post_db))
 
 	// Start the server
 

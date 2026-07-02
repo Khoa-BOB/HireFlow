@@ -157,9 +157,9 @@ Complete User API
 
 ### Companies
 
-- [ ] Create company
-- [ ] Update company
-- [ ] Delete company
+- [x] Create company
+- [x] Update company
+- [x] Delete company
 - [ ] Search company
 
 ### Departments

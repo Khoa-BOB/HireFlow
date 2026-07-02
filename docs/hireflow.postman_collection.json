@@ -15,6 +15,10 @@
     {
       "key": "refresh_token",
       "value": ""
+    },
+    {
+      "key": "company_id",
+      "value": ""
     }
   ],
   "item": [
@@ -138,6 +142,81 @@
           "request": {
             "method": "GET",
             "url": "{{base_url}}/auth/admin/users",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{access_token}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Company",
+      "item": [
+        {
+          "name": "Get All Companies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/companies"
+          }
+        },
+        {
+          "name": "Get Company By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/companies/{{company_id}}"
+          }
+        },
+        {
+          "name": "Create Company (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) {",
+                  "    pm.collectionVariables.set('company_id', res.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/companies",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{access_token}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corp\",\n  \"description\": \"Acme builds tools for builders.\",\n  \"industry\": \"Software\",\n  \"url\": \"https://acme.example.com\",\n  \"address\": \"123 Main St\",\n  \"city\": \"Springfield\",\n  \"state\": \"IL\",\n  \"country\": \"USA\",\n  \"zip_code\": \"62701\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Company (Admin)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/companies/{{company_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{access_token}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Acme now builds even better tools.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Company (Admin)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/companies/{{company_id}}",
             "auth": {
               "type": "bearer",
               "bearer": [{ "key": "token", "value": "{{access_token}}" }]
